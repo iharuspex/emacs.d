@@ -8,10 +8,19 @@
 (when (version< emacs-version "26.1")
   (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
 
-;; Editor basic config
+;; Packages
+;;=============================================================================
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
+
+;; Appearance setup
 ;;=============================================================================
 ;; set theme
 (load-theme 'wombat)
+;; set frame name, just because =)
+(setq frame-title-format "GNU Emacs")
 ;; interactive mode
 (ido-mode)
 ;; show column number
@@ -20,14 +29,19 @@
 (global-linum-mode t)
 ;; y-or-n
 (fset 'yes-or-no-p 'y-or-n-p)
+;; highlight corresponding parentheses when cursor is on one
+(show-paren-mode t)
+;; insert parenthesis by pair
+(electric-pair-mode 1)
+;; highlight tabs
+(setq-default highlight-tabs t)
 ;; disable toolbars
 (tool-bar-mode -1)
 ;;(menu-bar-mode -1)
 ;; disable scrollbar
 (scroll-bar-mode -1)
 
-;; Appearance setup
-;;=============================================================================
+;; display time, date and battery status
 (setq display-time-day-and-date t 
       display-time-24hr-format t 
       display-time-interval 10
