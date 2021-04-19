@@ -94,12 +94,25 @@
 (use-package projectile
   :ensure t
   :config
-  (progn
-    (projectile-global-mode)
-    ))
+  (progn (projectile-mode)))
 
 (use-package sr-speedbar
-  :ensure t)
+  :ensure t
+  :defer t
+  :init
+  (setq sr-speedbar-right-side nil)
+  (setq speedbar-show-unknown-files t)
+  (setq sr-speedbar-width 35)
+  (setq sr-speedbar-max-width 35)
+  (setq speedbar-use-images t)
+  (setq speedbar-initial-expansion-list-name "quick buffers")
+  (setq speedbar-initial-expansion-list-name "files"))
+
+(use-package neotree
+  :bind ([f8] . neotree-toggle)
+  :init (setq neo-window-width 35)
+  :config (setq neo-smart-open nil))
+
 
 (provide 'init-packages)
 
