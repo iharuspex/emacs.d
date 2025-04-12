@@ -1,92 +1,152 @@
-;;; init.el --- Init file
+;;; init.el --- My Emacs configuraion
 ;;; Commentary:
-;;; Yes, it is
-;;;
-;;; Code:
 
-;; Check version
-;;=============================================================================
-(let ((minver "25.1"))
-  (when (version< emacs-version minver)
-    (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-(when (version< emacs-version "26.1")
-  (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
+;;; Code:
+(message "Hello, Emacs!")
 
 ;; Appearance setup
-;;=============================================================================
-;; set theme
-(load-theme 'wombat)
-;; set frame name, just because =)
-(setq frame-title-format "GNU Emacs")
-;; interactive mode
-(ido-mode)
-;; show column number
+;; ====================================
+;;
+;; show column mode
 (column-number-mode)
 ;; set line numbers
 (global-linum-mode t)
 ;; y-or-n
 (fset 'yes-or-no-p 'y-or-n-p)
-;; highlight corresponding parentheses when cursor is on one
-(show-paren-mode t)
-;; insert parenthesis by pair
-(electric-pair-mode 1)
 ;; highlight tabs
-(setq-default highlight-tabs t)
-;; disable toolbars
-(tool-bar-mode -1)
-;;(menu-bar-mode -1)
-;; disable scrollbar
-(scroll-bar-mode -1)
+(setq-default highligh-tabs t)
+;; start maximized
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; highlight parentheshis
+(show-paren-mode t)
+;; pair-mode
+(electric-pair-mode t)
+;; move between windows using S-arrows
+(windmove-default-keybindings)
 
 ;; display time, date and battery status
-(setq-default display-time-day-and-date t
-      display-time-24hr-format t
-      display-time-interval 10
-      display-time-default-load-average nil)
-(display-time)
-(display-battery-mode 0)
+;; (setq-default display-time-day-and-date t
+;; 	      display-time-24h-format t
+;; 	      display-time-interval 10
+;; 	      display-time-default-load-average nil)
+;; (display-time)
+;; (display-battery-mode f)
 
-;; Indentation setup
-;;=============================================================================
-(setq-default indent-tabs-mode nil) ; never use tab characters for indentation
-(setq tab-width 4)
+;; Comment region using C-x C-/
+(defun toggle-comment-region-or-line ()
+  "Toggle comment for region or line."
+  (interactive)
+  (if (use-region-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    (comment-line 1)))
 
-;; For C
-;; TODO: replace to separate files!
-(defun my-c-mode-hook ()
-  (setq c-basic-offset 4
-	c-indent-level 4
-	c-default-style "linux"))
-(add-hook 'c-mode-common-hook 'my-c-mode-hook)
+(global-set-key (kbd "C-x /") 'toggle-comment-region-or-line)
 
-;; Enable auto-fill
-;;=============================================================================
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'text-mode-hook
-          '(lambda() (set-fill-column 80)))
-(add-hook 'prog-mode-hook 'turn-on-auto-fill)
-(add-hook 'prog-mode-hook
-          '(lambda() (set-fill-column 80)))
+(set-face-background 'show-paren-match (face-background 'highlight))
+(set-face-foreground 'show-paren-match (face-foreground 'highlight))
+(set-face-background 'show-paren-mismatch (face-background 'error))
+(set-face-foreground 'show-paren-mismatch (face-foreground 'error))
 
-;; Load external scripts
-;;=============================================================================
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;;(load-file "~/.emacs.d/ada-project-setup.el")
 
-(require 'init-benchmarking) ;; Measure startup time
-(require 'init-key-bindings) ;; Key bindings
-(require 'init-packages) ;; Packages
+;; Install MELPA repository
+;; ====================================
+(require 'package)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+
+;; Install doom-themes
+;; ====================================
+(use-package doom-themes
+	     :ensure t
+	     :config
+	     (load-theme 'doom-one t))
+
+;; Instal useful packages
+;; ====================================
+
+;; vterm
+(use-package vterm
+  :ensure t
+  :config
+  (setq vterm-always-compile-module t)
+  (add-to-list 'display-buffer-alist
+	       '((derived-mode . vterm-mode)
+		 (display-buffer-in-direction)
+		 (direction . bottom)
+		 (window-height . 0.2))))
+
+(defun launch-vterm ()
+  "Open vterm."
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (vterm))
+(global-set-key (kbd "C-c t") 'launch-vterm)
+
+;; Projectile
+(use-package projectile
+  :ensure t
+  :config
+  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
+  (global-set-key (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+(require 'projectile)
+(projectile-register-project-type 'alire '("alire.toml")
+				  :project-file "alire.toml"
+				  :compile "alr build"
+				  :test "alr test"
+				  :run "alr run")
+
+;; CMake project
+;; ====================================
+(use-package cmake-mode
+  :ensure t)
+
+;;(use-package treemacs
+;;  :ensure t
+;;  :bind (("C-x t" . treemacs))
+;;  :config
+;;  (setq treemacs-collapse-dirs 3
+;;	treemacs-display-in-side-window t))
+
+;; Ada configuration
+;; ====================================
+;;(use-package ada-mode
+;;	     :ensure t
+;;	     :mode "\\.ads\\'" "\\.adb\\'")
+
+;; Syntax checker
+(use-package flycheck
+  :ensure t
+  :config (global-flycheck-mode))
+
+;; Autocompletion
+(use-package company
+  :ensure t
+  :config (global-company-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (use-package))))
+ '(inhibit-startup-screen t)
+ '(package-selected-packages '(doom-themes use-package cmake-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'upcase-region 'disabled nil)
+
+(provide 'init)
+;;; init.el ends here
