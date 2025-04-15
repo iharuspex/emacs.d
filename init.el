@@ -48,6 +48,7 @@
 (set-face-foreground 'show-paren-mismatch (face-foreground 'error))
 
 ;;(load-file "~/.emacs.d/ada-project-setup.el")
+(load-file "~/.emacs.d/org-config.el")
 
 ;; Install MELPA repository
 ;; ====================================
@@ -71,6 +72,21 @@
 
 ;; Instal useful packages
 ;; ====================================
+
+;; yasnippet
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1)
+  :bind ("C-c y" . yas-expand))
+
+;; reverse-im
+(use-package reverse-im
+  :ensure t
+  :demand t
+  :config
+  (reverse-im-activate "russian-computer")
+  (setq reverse-im-char-fold t))
 
 ;; vterm
 (use-package vterm
