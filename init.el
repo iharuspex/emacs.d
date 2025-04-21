@@ -23,16 +23,10 @@
 (electric-pair-mode t)
 ;; move between windows using S-arrows
 (windmove-default-keybindings)
+;; hide toolbars
+(tool-bar-mode -1)
 
-;; display time, date and battery status
-;; (setq-default display-time-day-and-date t
-;; 	      display-time-24h-format t
-;; 	      display-time-interval 10
-;; 	      display-time-default-load-average nil)
-;; (display-time)
-;; (display-battery-mode f)
-
-;; Comment region using C-x C-/
+;; Comment region using C-x /
 (defun toggle-comment-region-or-line ()
   "Toggle comment for region or line."
   (interactive)
@@ -73,6 +67,11 @@
 ;; Instal useful packages
 ;; ====================================
 
+;; magit
+;; (use-package magit
+;;   :ensure t
+;;   :bind ("C-x g" . magit-status))
+
 ;; yasnippet
 (use-package yasnippet
   :ensure t
@@ -80,7 +79,7 @@
   (yas-global-mode 1)
   :bind ("C-c y" . yas-expand))
 
-;; reverse-im
+;; reverse-im (fix the keyboard layout for Emacs hotkeys)
 (use-package reverse-im
   :ensure t
   :demand t
@@ -156,6 +155,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
+ '(org-directory "~/Documents/org/")
  '(package-selected-packages '(doom-themes use-package cmake-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
