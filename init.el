@@ -25,6 +25,8 @@
 (windmove-default-keybindings)
 ;; hide toolbars
 (tool-bar-mode -1)
+;; enable winner-mode (history of window composition)
+(winner-mode 1)
 
 ;; Comment region using C-x /
 (defun toggle-comment-region-or-line ()
@@ -41,7 +43,7 @@
 (set-face-background 'show-paren-mismatch (face-background 'error))
 (set-face-foreground 'show-paren-mismatch (face-foreground 'error))
 
-;;(load-file "~/.emacs.d/ada-project-setup.el")
+;; (load-file "~/.emacs.d/ada-project-setup.el")
 (load-file "~/.emacs.d/org-config.el")
 
 ;; Install MELPA repository
@@ -71,6 +73,10 @@
 ;; (use-package magit
 ;;   :ensure t
 ;;   :bind ("C-x g" . magit-status))
+
+;; restart-emacs
+(use-package restart-emacs
+  :ensure t)
 
 ;; yasnippet
 (use-package yasnippet
