@@ -43,9 +43,6 @@
 (set-face-background 'show-paren-mismatch (face-background 'error))
 (set-face-foreground 'show-paren-mismatch (face-foreground 'error))
 
-;; (load-file "~/.emacs.d/ada-project-setup.el")
-(load-file "~/.emacs.d/org-config.el")
-
 ;; Install MELPA repository
 ;; ====================================
 (require 'package)
@@ -58,6 +55,9 @@
   (package-install 'use-package))
 
 (require 'use-package)
+
+;; (load-file "~/.emacs.d/ada-project-setup.el")
+(load-file "~/.emacs.d/org-config.el")
 
 ;; Install doom-themes
 ;; ====================================

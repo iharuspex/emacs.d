@@ -7,8 +7,25 @@
 
 (require 'org-install)
 (require 'org)
+(require 'use-package)
+
+;; Additional packages
+(use-package adaptive-wrap
+  :ensure t
+  :config
+  (setq adaptive-wrap-extra-indent 2)
+  (add-hook 'org-mode-hook 'adaptive-wrap-prefix-mode))
+
+(setq-default fill-column 120)
+(setq-default display-fill-column-indicator-column 120)
+(add-hook 'org-mode-hook 'display-fill-column-indicator-mode)
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+
+;; Enable the soft indents
+(add-hook 'org-mode-hook 'org-indent-mode)
+;; Enable visual wrap
+(add-hook 'org-mode-hook 'visual-line-mode)
 
 (defun open-org-directory ()
   "Open ~/Documents/org in Dired mode."
