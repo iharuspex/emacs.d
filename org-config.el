@@ -41,18 +41,18 @@
 (setq org-agenda-files (file-expand-wildcards "~/Documents/org/agenda/*.org"))
 
 ;; Insert header to org-files
-(auto-insert-mode t)
+(auto-insert-mode 1)
 
 (define-auto-insert
-  '("\\.org\\'" . "Org-mode file")
-  `(,(lambda ()
+  '("\\.org\\'" . "Org-mode file template")
+  (lambda ()
        (unless (string-match-p "^*" (buffer-name))
-	 '("Title: "
+	 (insert
 	   "#+TITLE: " (read-string "Title: ") "\n"
 	   "#+AUTHOR: " user-full-name "\n"
 	   "#+DATE: " (format-time-string "%d-%m-%Y") "\n"
 	   "#+STARTUP: overview\n"
-	   "\n* ")))))
+	   "\n* "))))
 
 (provide 'org-config)
 ;;; org-config.el ends here
