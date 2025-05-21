@@ -22,6 +22,9 @@
 
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
+;; Visualize habit progress
+;;(setq org-habit-show-habits 1)
+
 ;; Enable the soft indents
 (add-hook 'org-mode-hook 'org-indent-mode)
 ;; Enable visual wrap

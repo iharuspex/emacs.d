@@ -27,6 +27,8 @@
 (tool-bar-mode -1)
 ;; enable winner-mode (history of window composition)
 (winner-mode 1)
+;; display buffer in tabs
+(setq display-buffer-base-action '(display-buffer-in-tab))
 
 ;; Comment region using C-x /
 (defun toggle-comment-region-or-line ()
@@ -104,15 +106,16 @@
 		 (direction . bottom)
 		 (window-height . 0.2))))
 
-(defun launch-vterm ()
-  "Open vterm."
-  (interactive)
-  (split-window-below)
-  (other-window 1)
-  (vterm))
-(global-set-key (kbd "C-c t") 'launch-vterm)
+;; (defun launch-vterm ()
+;;   "Open vterm."
+;;   (interactive)
+;;   (split-window-below)
+;;   (other-window 1)
+;;   (vterm))
+;; (global-set-key (kbd "C-c t") 'launch-vterm)
 
 ;; Projectile
+;; TODO move to separate file
 (use-package projectile
   :ensure t
   :config
@@ -132,12 +135,33 @@
 (use-package cmake-mode
   :ensure t)
 
-;;(use-package treemacs
-;;  :ensure t
-;;  :bind (("C-x t" . treemacs))
-;;  :config
-;;  (setq treemacs-collapse-dirs 3
-;;	treemacs-display-in-side-window t))
+;; Treemacs config
+(use-package treemacs
+  :ensure t
+  :defer nil
+  :bind (("C-x t" . treemacs))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs 3
+	  treemacs-display-in-side-window t)))
+;; (treemacs-start-on-boot)
+
+(use-package treemacs-projectile
+  :ensure t
+  :after (treemacs projectile)
+  :config
+  (add-hook 'projectile-after-switch-project-hook #'treemacs-add-and-display-current-project-exclusively))
+
+(defun my/open-treemacs-if-dir ()
+  "Asd."
+  (when (and (file-directory-p default-directory)
+             (delete-other-windows)
+	     (treemacs)
+	     (other-window 1))
+    (treemacs-add-and-display-current-project-exclusively)))
+
+(add-hook 'emacs-startup-hook #'my/open-treemacs-if-dir)
+(add-hook 'projectile-after-switch-project-hook #'treemacs-add-and-display-current-project-exclusively)
 
 ;; Ada configuration
 ;; ====================================
@@ -162,7 +186,42 @@
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
  '(org-directory "~/Documents/org/")
- '(package-selected-packages '(doom-themes use-package cmake-mode)))
+ '(package-selected-packages '(doom-themes use-package cmake-mode))
+ '(safe-local-variable-values
+   '((eval when
+	   (featurep 'projectile)
+	   (unless
+	       (get-buffer "*project-term*")
+	     (let
+		 ((default-directory
+		    (projectile-project-root)))
+	       (split-window-below)
+	       (other-window 1)
+	       (shrink-window 10)
+	       (projectile-run-term)
+	       (rename-buffer "*project-term*")
+	       (term-send-raw-string "cd $PWD && clear
+")
+	       (other-window -1)))
+	   (add-hook 'focus-in-hook 'save-some-buffers)
+	   (global-auto-revert-mode 1))
+     (eval when
+	   (featurep 'projectile)
+	   (unless
+	       (get-buffer "*project-term*")
+	     (let
+		 ((default-directory
+		    (projectile-project-root)))
+	       (split-window-below)
+	       (shrink-window 10)
+	       (other-window 1)
+	       (projectile-run-term)
+	       (rename-buffer "*project-term*")
+	       (term-send-raw-string "cd $PWD && clear
+")
+	       (other-window -1)))
+	   (add-hook 'focus-in-hook 'save-some-buffers)
+	   (global-auto-revert-mode 1)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
