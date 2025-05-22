@@ -8,6 +8,7 @@
 (require 'org-install)
 (require 'org)
 (require 'use-package)
+(require 'treemacs)
 
 ;; Additional packages
 (use-package adaptive-wrap
@@ -33,7 +34,10 @@
 (defun open-org-directory ()
   "Open ~/Documents/org in Dired mode."
   (interactive)
-  (dired "~/Documents/org/"))
+  ;; (dired "~/Documents/org/"))
+  (unless (treemacs-current-visibility)
+    (treemacs))
+  (treemacs-select-window))
 
 (global-set-key (kbd "C-c o") 'open-org-directory)
 (global-set-key (kbd "C-c l") #'org-store-link)
@@ -41,7 +45,7 @@
 (global-set-key (kbd "C-c c") #'org-capture)
 
 ;; Agenda config
-(setq org-agenda-files (file-expand-wildcards "~/Documents/org/agenda/*.org"))
+(setq org-agenda-files (file-expand-wildcards "~/Documents/org/4-tasks/*.org"))
 
 ;; Insert header to org-files
 (auto-insert-mode 1)

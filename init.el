@@ -143,7 +143,11 @@
   :config
   (progn
     (setq treemacs-collapse-dirs 3
-	  treemacs-display-in-side-window t)))
+	  treemacs-display-in-side-window t
+	  )
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)))
 ;; (treemacs-start-on-boot)
 
 (use-package treemacs-projectile
