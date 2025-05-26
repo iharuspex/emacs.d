@@ -183,6 +183,34 @@
   :ensure t
   :config (global-company-mode))
 
+;; Usefull functions (move to separate el file later)
+;; ====================================
+(use-package google-translate
+  :ensure t)
+
+(defun google-translate-english-to-russian-xxx (text)
+  "Translate TEXT from English to Russian using Google Translate."
+  (interactive)
+  ;; (google-translate-translate "en" "ru" text))
+  (let ((result (google-translate-translate "en" "ru" text)))
+    (if (stringp (car result))
+	(car result)
+      (error "Translation error: %S" result))))
+  
+(defun org-translate-en-to-ru ()
+  "Translate."
+  (interactive)
+  (unless (org-at-table-p)
+    (user-error "Not in table!"))
+
+  (let* ((english-word (string-trim (org-table-get-field 1)))
+	 (translation (if (string-empty-p english-word)
+			  ""
+			(google-translate-english-to-russian english-word))))
+    (org-table-next-field)
+    (org-table-put-field nil translation)
+    (org-table-previous-field)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
