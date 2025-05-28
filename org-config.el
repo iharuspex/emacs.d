@@ -9,6 +9,7 @@
 (require 'org)
 (require 'use-package)
 (require 'treemacs)
+(require 'org-clockify)
 
 ;; Additional packages
 (use-package adaptive-wrap
@@ -46,6 +47,9 @@
 
 ;; Agenda config
 (setq org-agenda-files (file-expand-wildcards "~/Documents/org/4-tasks/*.org"))
+
+;; Clockify integration
+(setq org-clockify-api-key (getenv "CLOCKIFY_API_KEY"))
 
 ;; Insert header to org-files
 (auto-insert-mode 1)

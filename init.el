@@ -4,6 +4,9 @@
 ;;; Code:
 (message "Hello, Emacs!")
 
+;; User-defined Lisp code
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
 ;; Appearance setup
 ;; ====================================
 ;;
@@ -29,6 +32,8 @@
 (winner-mode 1)
 ;; display buffer in tabs
 (setq display-buffer-base-action '(display-buffer-in-tab))
+;; fix emoji
+(set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") nil 'prepend)
 
 ;; Comment region using C-x /
 (defun toggle-comment-region-or-line ()
@@ -78,6 +83,10 @@
 
 ;; restart-emacs
 (use-package restart-emacs
+  :ensure t)
+
+;; request
+(use-package request
   :ensure t)
 
 ;; yasnippet
@@ -217,8 +226,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
+ '(ispell-dictionary nil)
  '(org-directory "~/Documents/org/")
- '(package-selected-packages '(doom-themes use-package cmake-mode))
+ '(package-selected-packages '(request doom-themes use-package cmake-mode))
  '(safe-local-variable-values
    '((eval when
 	   (featurep 'projectile)
