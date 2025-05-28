@@ -63,9 +63,6 @@
 
 (require 'use-package)
 
-;; (load-file "~/.emacs.d/ada-project-setup.el")
-(load-file "~/.emacs.d/org-config.el")
-
 ;; Install doom-themes
 ;; ====================================
 (use-package doom-themes
@@ -159,6 +156,7 @@
     (treemacs-fringe-indicator-mode t)))
 ;; (treemacs-start-on-boot)
 
+(require 'treemacs)
 (use-package treemacs-projectile
   :ensure t
   :after (treemacs projectile)
@@ -219,6 +217,9 @@
     (org-table-next-field)
     (org-table-put-field nil translation)
     (org-table-previous-field)))
+
+;; (load-file "~/.emacs.d/ada-project-setup.el")
+(load-file "~/.emacs.d/org-config.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
