@@ -3,7 +3,7 @@
 ;;; Code:
 ;; -*- lexical-binding: t; -*-
 (custom-set-variables
- '(org-directory "~/Documents/org/"))
+ '(org-directory "~/Dropbox/Documents/org/"))
 
 (require 'org-install)
 (require 'org)
@@ -33,9 +33,8 @@
 (add-hook 'org-mode-hook 'visual-line-mode)
 
 (defun open-org-directory ()
-  "Open ~/Documents/org in Dired mode."
+  "Open org-directory in Dired mode."
   (interactive)
-  ;; (dired "~/Documents/org/"))
   (unless (treemacs-current-visibility)
     (treemacs))
   (treemacs-select-window))
@@ -46,7 +45,7 @@
 (global-set-key (kbd "C-c c") #'org-capture)
 
 ;; Agenda config
-(setq org-agenda-files (file-expand-wildcards "~/Documents/org/4-tasks/*.org"))
+(setq org-agenda-files (file-expand-wildcards (expand-file-name "4-tasks/*.org" org-directory)))
 
 ;; Clockify integration
 (setq org-clockify-api-key (getenv "CLOCKIFY_API_KEY"))

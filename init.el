@@ -228,7 +228,7 @@
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
  '(ispell-dictionary nil)
- '(org-directory "~/Documents/org/")
+ '(org-directory "~/Dropbox/Documents/org/")
  '(package-selected-packages '(request doom-themes use-package cmake-mode))
  '(safe-local-variable-values
    '((eval when
