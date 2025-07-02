@@ -51,6 +51,23 @@
 ;; Clockify integration
 (setq org-clockify-api-key (getenv "CLOCKIFY_API_KEY"))
 
+;; Mermaid
+(setq ob-mermaid-cli-path "mmdc")
+
+;; PlantUML
+(setq org-plantuml-jar-path "~/.emacs.d/plantuml/plantuml.jar")
+
+;; Babel load
+(setq org-confirm-babel-evaluate nil)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (python . t)
+   (mermaid . t)
+   (plantuml . t)
+   ))
+
 ;; Setup for TODO -> DONE when all children are done
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."

@@ -35,6 +35,8 @@
 ;; fix emoji
 (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") nil 'prepend)
 
+(global-auto-revert-mode t)
+
 ;; Comment region using C-x /
 (defun toggle-comment-region-or-line ()
   "Toggle comment for region or line."
@@ -195,6 +197,10 @@
 (use-package google-translate
   :ensure t)
 
+;; ob-mermaid
+(use-package ob-mermaid
+  :ensure t)
+
 (defun google-translate-english-to-russian-xxx (text)
   "Translate TEXT from English to Russian using Google Translate."
   (interactive)
@@ -229,7 +235,7 @@
  '(inhibit-startup-screen t)
  '(ispell-dictionary nil)
  '(org-directory "~/Documents/org/")
- '(package-selected-packages '(request doom-themes use-package cmake-mode))
+ '(package-selected-packages '(ob-mermaid request doom-themes use-package cmake-mode))
  '(safe-local-variable-values
    '((eval when
 	   (featurep 'projectile)
